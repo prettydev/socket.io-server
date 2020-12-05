@@ -1,6 +1,7 @@
-const express = require("express");
-const http = require("http");
+import express from "express";
 const socketIo = require("socket.io");
+
+const http = require("http");
 
 const port = process.env.PORT || 4001;
 
@@ -16,9 +17,9 @@ const io = socketIo(server, {
 });
 
 
-let interval;
+let interval: any;
 
-io.on("connection", (socket) => {
+io.on("connection", (socket: SocketIO.Socket) => {
     console.log("New client connected");
     if (interval) {
         clearInterval(interval);
@@ -30,10 +31,10 @@ io.on("connection", (socket) => {
     });
 });
 
-const getApiAndEmit = socket => {
+const getApiAndEmit = (socket: SocketIO.Socket) => {
     const response = new Date();
     // Emitting a new message. Will be consumed by the client
-    socket.emit("FromAPI", response);
+    socket.emit("ServerTime", response);
 };
 
 server.listen(port, () => console.log(`Listening on port ${port}`));
