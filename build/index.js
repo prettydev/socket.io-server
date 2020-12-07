@@ -4,8 +4,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const http = require("http");
 const socketIo = require("socket.io");
+const http = require("http");
 const port = process.env.PORT || 4001;
 const app = express_1.default();
 const server = http.createServer(app);
@@ -27,7 +27,7 @@ io.on("connection", (socket) => {
         clearInterval(interval);
     });
 });
-const getApiAndEmit = socket => {
+const getApiAndEmit = (socket) => {
     const response = new Date();
     // Emitting a new message. Will be consumed by the client
     socket.emit("ServerTime", response);
