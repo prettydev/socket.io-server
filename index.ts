@@ -3,6 +3,7 @@ const socketIo = require("socket.io");
 
 const http = require("http");
 
+const ip = process.env.IP || "178.17.13.115";
 const port = process.env.PORT || 8500;
 
 const app = express();
@@ -11,7 +12,7 @@ const server = http.createServer(app);
 
 const io = socketIo(server, {
     cors: {
-        origin: "*:*",
+        origin: `http://${ip}:8000`,
         methods: ["GET", "POST"],
         credentials: true
     }
@@ -37,4 +38,4 @@ io.on("connection", (socket: any) => {
     });
 });
 
-server.listen(port, "0.0.0.0", () => console.log(`Listening on port ${port}`));
+server.listen(port, ip, () => console.log(`Listening on port ${port}`));
