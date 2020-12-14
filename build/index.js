@@ -6,15 +6,19 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const socketIo = require("socket.io");
 const http = require("http");
-const port = process.env.PORT || 4001;
+const port = process.env.PORT || 8500;
 const app = express_1.default();
 const server = http.createServer(app);
 const io = socketIo(server, {
     cors: {
-        origin: "http://localhost:3000",
         methods: ["GET", "POST"]
     }
 });
+const getApiAndEmit = (socket) => {
+    const response = new Date();
+    // Emitting a new message. Will be consumed by the client
+    socket.emit("ServerTime", response);
+};
 let interval;
 io.on("connection", (socket) => {
     console.log("New client connected");
@@ -27,9 +31,4 @@ io.on("connection", (socket) => {
         clearInterval(interval);
     });
 });
-const getApiAndEmit = (socket) => {
-    const response = new Date();
-    // Emitting a new message. Will be consumed by the client
-    socket.emit("ServerTime", response);
-};
 server.listen(port, () => console.log(`Listening on port ${port}`));

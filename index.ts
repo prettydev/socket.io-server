@@ -15,11 +15,16 @@ const io = socketIo(server, {
     }
 });
 
+const getApiAndEmit = (socket: any) => {
+    const response = new Date();
+    // Emitting a new message. Will be consumed by the client
+    socket.emit("ServerTime", response);
+};
 
 let interval: any;
 
-io.on("connection", (socket: SocketIO.Socket) => {
-    console.log("New client connected");
+io.on("connection", (socket: any) => {
+    console.log("New client connected", socket.id);
     if (interval) {
         clearInterval(interval);
     }
@@ -29,11 +34,5 @@ io.on("connection", (socket: SocketIO.Socket) => {
         clearInterval(interval);
     });
 });
-
-const getApiAndEmit = (socket: SocketIO.Socket) => {
-    const response = new Date();
-    // Emitting a new message. Will be consumed by the client
-    socket.emit("ServerTime", response);
-};
 
 server.listen(port, () => console.log(`Listening on port ${port}`));
