@@ -11,7 +11,9 @@ const server = http.createServer(app);
 
 const io = socketIo(server, {
     cors: {
-        methods: ["GET", "POST"]
+        origin: "*:*",
+        methods: ["GET", "POST"],
+        credentials: true
     }
 });
 
