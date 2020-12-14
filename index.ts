@@ -1,4 +1,5 @@
 import express from "express";
+import { IMsg } from "./types";
 const socketIo = require("socket.io");
 
 const http = require("http");
@@ -18,9 +19,8 @@ const io = socketIo(server, {
     }
 });
 
-const getApiAndEmit = (socket: any) => {
+const getServerTime = (socket: any) => {
     const response = new Date();
-    // Emitting a new message. Will be consumed by the client
     socket.emit("ServerTime", response);
 };
 
@@ -31,7 +31,13 @@ io.on("connection", (socket: any) => {
     if (interval) {
         clearInterval(interval);
     }
-    interval = setInterval(() => getApiAndEmit(socket), 1000);
+    interval = setInterval(() => getServerTime(socket), 1000);
+
+    socket.on('msg', (msg: IMsg) => {
+        console.log(`message from ${socket.id}:${msg.prefix}:${msg.msg}`);
+        socket.emit("msg", `echo from server-${msg.prefix}:${msg.msg}`);
+    });
+
     socket.on("disconnect", () => {
         console.log("Client disconnected");
         clearInterval(interval);
